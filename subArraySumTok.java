@@ -5,38 +5,25 @@ import java.util.Set;
 public class subArraySumTok {
 	//my first approach was wrong because this problem is not solved using recursion but using the prefix sum and Hashmap
 	public static int subArrayCount(ArrayList < Integer > arr, int k) {
-		HashMap<Integer,Integer> map=new HashMap<>(); 
-		int prefixsum=0;
-		int count=0;
-		for(int i=0;i<arr.size();i++) {
-			prefixsum=prefixsum+arr.get(i);
-			arr.set(i, prefixsum);
-		}
-		for(int i=0;i<arr.size();i++) {
-			int key=arr.get(i)%k;
-			if(key<0) {
-				key=key+k;
-			}
-			if(map.containsKey(key)) {
-				map.put(key,map.get(key)+1);
-			}
-			else
-			{
-				map.put(key, 1);
-			}
-		}
-		Set<Integer> keys=map.keySet();
-		for(int i:keys) {
-			if(i==0) {
-				int value=map.get(i);
-				count=count+((value*(value-1))/2)+value;
-			}
-			else
-			{
-				int value=map.get(i);
-				count=count+((value*(value-1))/2);
-			}
-		}
-		return count;
+		int helper[]=new int[k+1];
+        int ind=arr.get(0)%k;
+        if(ind<0){
+            ind=ind+k;
+        }
+        helper[ind]++;
+        for(int i=1;i<arr.size();i++){
+            arr.set(i, arr.get(i)+arr.get(i-1));
+            int index=arr.get(i)%k;
+            if(index<0){
+                index=index+k;
+            }
+            helper[index]++;
+        }
+        int count=0;
+        count=count+((helper[0]*(helper[0]-1))/2)+helper[0];
+        for(int i=1;i<helper.length;i++){
+            count=count+((helper[i]*(helper[i]-1))/2);
+        }
+        return count;
    }
 }
