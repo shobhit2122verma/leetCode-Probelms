@@ -45,6 +45,31 @@ public class Treemain {
 		}
 		return root;
 	}
+	
+	public static TreeNode<Integer> nodeHavingSumOfChildrenAndNodeMax(TreeNode<Integer> root){
+		if(root==null) {
+			return null;
+		}
+		TreeNode<Integer> ans=new TreeNode<Integer>(Integer.MIN_VALUE);
+		queue.add(root);
+		int max=ans.data;
+		while(!queue.isEmpty()) {
+			TreeNode<Integer> root1=queue.peek();
+			int sum=root1.data;
+			for(int i=0;i<root1.children.size();i++) {
+				TreeNode<Integer> child=root1.children.get(i);
+				sum=sum+child.data;
+				queue.add(child);
+			}
+			if(sum>=max) {
+				ans=root1;
+				max=sum;
+			}
+//			System.out.println(root1.data+" "+ans.data+" "+max);
+			queue.remove();
+		}
+		return ans;
+	}
 	public static void printLevel(TreeNode<Integer> root) throws NoSuchElementException{
 		if(root==null) {
 			return;
@@ -85,11 +110,43 @@ public class Treemain {
 		}
 		return ans;
 	}
+	
+	public static void postorderTraversal(TreeNode<Integer> root) {
+		if(root==null) {
+			return;
+		}
+		for(int i=0;i<root.children.size();i++) {
+			postorderTraversal(root.children.get(i));
+		}
+		System.out.print(root.data+" ");
+	}
+	
+	public static boolean checkELementPresentBFS(TreeNode<Integer> root,int n) {
+		if(root==null)
+		{
+			return false;
+		}queue.add(root);
+		while(!queue.isEmpty()) {
+			TreeNode<Integer> root1=queue.peek();
+			if(root1.data==n) {
+				return true;
+			}
+			for(int i=0;i<root1.children.size();i++) {
+				queue.add(root1.children.get(i));
+			}
+			queue.remove();
+		}
+		return false;
+	}
 	public static void main(String[] args) {
 		Scanner in=new Scanner(System.in);
 		TreeNode<Integer> root=leveltakeInput(in);
+//		int n=in.nextInt();
 //		printLevel(root);
 //		System.out.println(findHeight(root));
-		System.out.println(countleafnodes(root));
+//		System.out.println(countleafnodes(root));
+//		postorderTraversal(root);
+//		System.out.println(checkELementPresentBFS(root, n));
+		System.out.println(nodeHavingSumOfChildrenAndNodeMax(root).data);
 	}
 }
